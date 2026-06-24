@@ -1,0 +1,45 @@
+*.iml
+.kotlin
+.gradle
+**/build/
+xcuserdata
+!src/**/build/
+local.properties
+.idea
+.DS_Store
+captures
+.externalNativeBuild
+.cxx
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcodeproj/project.xcworkspace/
+!*.xcworkspace/contents.xcworkspacedata
+**/xcshareddata/WorkspaceSettings.xcsettings
+node_modules/
+
+!xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+# Archivos de build y carpetas de salida
+/build
+.gradle
+/app/build
+/.gradle
+
+# Archivos de configuración de IDE (Android Studio/IntelliJ)
+.idea/
+*.iml
+*.iws
+*.ipr
+*.iws
+
+# Archivos temporales del sistema
+.DS_Store
+*.pyc
+*.pyo
+
+# Archivos de entorno local
+local.properties
+
+# Historial de archivos de VCS
+.git/

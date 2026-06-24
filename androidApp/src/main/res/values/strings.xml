@@ -1,0 +1,80 @@
+<resources>
+    <string name="app_name">Servitec</string>
+    <string name="welcome_title">Servitec Servicio</string>
+    <string name="login_button">INICIAR SESIÓN</string>
+
+    <!-- Generic / Shared -->
+    <string name="logo_desc">Logo Servitec</string>
+    <string name="brand_main">SERVITEC</string>
+    <string name="brand_sub">SERVICIO</string>
+    <string name="welcome">Bienvenido</string>
+    <string name="back_desc">Volver</string>
+    <string name="save">GUARDAR</string>
+    <string name="msg_operation_success">¡Operación exitosa!</string>
+    <string name="search_placeholder">Buscar...</string>
+
+    <!-- Login Screen -->
+    <string name="login_subtitle">Accede a tu panel de gestión</string>
+    <string name="user_email_placeholder">Usuario o Email</string>
+    <string name="password_placeholder">Contraseña</string>
+
+    <!-- Home Screen -->
+    <string name="ops_status">Estado de tus operaciones</string>
+    <string name="label_users">Usuarios</string>
+    <string name="label_equipments">Equipos</string>
+    <string name="label_services">Servicios</string>
+    <string name="noti_desc">Notificaciones</string>
+    <string name="home_desc">Volver al Inicio</string>
+    <string name="logout_desc">Cerrar Sesión</string>
+    <string name="edit_action_desc">Acción Editar</string>
+    <string name="view_list_action_desc">Acción Ver Lista</string>
+
+    <!-- Record Screen -->
+    <string name="title_register_equipment">REGISTRAR EQUIPO</string>
+    <string name="title_assign_technician">ASIGNAR TÉCNICO</string>
+    <string name="title_rate_service">CALIFICAR SERVICIO</string>
+    <string name="title_new_service">NUEVO SERVICIO</string>
+
+    <string name="label_brand">Marca</string>
+    <string name="placeholder_brand">Ej: HP</string>
+    <string name="label_model">Modelo</string>
+    <string name="placeholder_model">Ej: LaserJet Pro</string>
+    <string name="label_serial">Número de Serie</string>
+    <string name="placeholder_serial">S/N: 123456789</string>
+    <string name="label_client_email">Correo del Cliente</string>
+    <string name="placeholder_client_email">cliente@ejemplo.com</string>
+
+    <string name="assigning_tech_to_service">Asignando técnico al servicio #%1$d</string>
+    <string name="label_tech_email">Correo del Técnico</string>
+    <string name="placeholder_tech_email">tecnico@ejemplo.com</string>
+
+    <string name="rate_service_id">Califica el servicio #%1$d</string>
+    <string name="label_rating">Calificación (1-5)</string>
+    <string name="placeholder_rating">Ej: 5</string>
+
+    <string name="title_finish_order">Finalizar Orden #%1$d</string>
+    <string name="title_finish_order_simple">FINALIZAR ORDEN</string>
+    <string name="title_start_service">Iniciar Orden #%1$d</string>
+    <string name="btn_start_service">INICIAR SERVICIO</string>
+    <string name="msg_start_service_confirm">Presione el botón para cambiar el estado de la orden #%1$d a INICIADO.</string>
+    <string name="label_tech_report">Informe Técnico</string>
+    <string name="placeholder_tech_report">Describa la solución aplicada...</string>
+    <string name="placeholder_select_tech">Seleccione un técnico</string>
+    <string name="placeholder_select_equipment">Seleccione un equipo</string>
+
+    <string name="label_service_title">Título del Servicio</string>
+    <string name="placeholder_service_title">Ej: No enciende</string>
+    <string name="label_description">Descripción</string>
+    <string name="placeholder_description">Detalle el problema...</string>
+    <string name="label_equipment_id">ID Equipo</string>
+    <string name="placeholder_id">ID</string>
+    <string name="label_tech_optional">Técnico (Correo)</string>
+    <string name="placeholder_optional">Opcional</string>
+
+    <!-- List Screen -->
+    <string name="title_history_services">HISTORIAL SERVICIOS</string>
+    <string name="title_inventory_equipments">INVENTARIO EQUIPOS</string>
+    <string name="title_management_users">GESTIÓN USUARIOS</string>
+    <string name="item_id_format">Elemento #%1$d</string>
+    <string name="item_description_placeholder">Descripción breve del registro seleccionado</string>
+</resources>
