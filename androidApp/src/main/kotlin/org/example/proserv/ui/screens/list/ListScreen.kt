@@ -1,6 +1,7 @@
 package org.example.proserv.ui.screens.list
 
 // 📦 IMPORTACIÓN DE COMPOSABLES Y RECURSOS
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -46,6 +47,9 @@ fun ListScreen(
     
     var searchQuery by remember { mutableStateOf("") }
     val uiState = viewModel.uiState
+
+    // 🔑 LÓGICA: Navegación nativa
+    BackHandler { onBack() }
 
     // 🔑 CARGA INICIAL: Sincroniza con Supabase al entrar
     LaunchedEffect(tipo) {

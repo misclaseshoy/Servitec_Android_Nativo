@@ -1,5 +1,6 @@
 package org.example.proserv.ui.screens.home
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -50,6 +51,11 @@ fun HomeScreen(
     val verdeAdmin = MaterialTheme.colorScheme.secondary
     val azulEquipos = AzulEquipos
     val azulServicios = MaterialTheme.colorScheme.tertiary
+
+    // 🔑 LÓGICA: Evitar que la app se cierre accidentalmente desde el Home
+    BackHandler(enabled = true) {
+        // Al estar en Home, el botón atrás no hace nada (evita cierre)
+    }
 
     Column(
         modifier = Modifier
@@ -192,7 +198,7 @@ fun HomeScreen(
                             painter = painterResource(id = R.drawable.noti),
                             contentDescription = stringResource(R.string.noti_desc),
                             tint = azulPetroleo,
-                            modifier = Modifier.size(38.dp)
+                            modifier = Modifier.size(57.dp)
                         )
                         // 📍 ACCIÓN: Refrescar Home
                         Icon(
@@ -200,7 +206,7 @@ fun HomeScreen(
                             contentDescription = stringResource(R.string.home_desc),
                             tint = azulPetroleo,
                             modifier = Modifier
-                                .size(55.dp)
+                                .size(82.dp)
                                 .clickable { /* 🟢 Acción: Recarga de datos del Dashboard */ }
                         )
                         // 📍 ACCIÓN: Salida Segura
@@ -209,7 +215,7 @@ fun HomeScreen(
                             contentDescription = stringResource(R.string.logout_desc),
                             tint = azulPetroleo,
                             modifier = Modifier
-                                .size(42.dp)
+                                .size(63.dp)
                                 .clickable { onLogout() }
                         )
                     }

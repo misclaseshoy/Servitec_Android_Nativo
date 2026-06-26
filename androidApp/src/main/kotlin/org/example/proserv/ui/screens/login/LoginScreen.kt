@@ -13,7 +13,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.tooling.preview.Preview
@@ -64,6 +74,8 @@ fun LoginContent(
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
 
     // 🔑 PALETA DE COLORES SERVITEC (Desde MaterialTheme)
     val azulPetroleo = MaterialTheme.colorScheme.primary
@@ -133,7 +145,14 @@ fun LoginContent(
                 unfocusedIndicatorColor = Color.Transparent,
                 focusedTextColor = textoOscuro
             ),
-            singleLine = true
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next
+            ),
+            keyboardActions = KeyboardActions(
+                onNext = { focusManager.moveFocus(FocusDirection.Down) }
+            )
         )
 
         Spacer(modifier = Modifier.height(15.dp))
@@ -144,7 +163,15 @@ fun LoginContent(
             onValueChange = { password = it },
             placeholder = { Text(text = stringResource(R.string.password_placeholder), color = Color.Gray) },
             modifier = Modifier.fillMaxWidth(),
-            visualTransformation = PasswordVisualTransformation(),
+            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            trailingIcon = {
+                val image = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
+                val description = if (passwordVisible) "Ocultar contraseña" else "Mostrar contraseña"
+
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(imageVector = image, contentDescription = description, tint = Color.Gray)
+                }
+            },
             shape = RoundedCornerShape(15.dp),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = fondoCrema,
@@ -153,7 +180,19 @@ fun LoginContent(
                 unfocusedIndicatorColor = Color.Transparent,
                 focusedTextColor = textoOscuro
             ),
-            singleLine = true
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.clearFocus()
+                    if (email.isNotBlank() && password.isNotBlank()) {
+                        onLoginClick(email.trim(), password.trim())
+                    }
+                }
+            )
         )
 
         Spacer(modifier = Modifier.height(30.dp))

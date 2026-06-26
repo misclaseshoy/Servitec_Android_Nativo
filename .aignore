@@ -1,0 +1,11 @@
+# Bloquear directorios de compilación (los más pesados)
+.gradle/
+.idea/
+build/
+app/build/
+androidApp/build/
+
+# Opcional: Bloquear recursos visuales pesados si ya no los necesitas mapear
+*.png
+*.jpg
+*.svg

@@ -2,6 +2,7 @@ package org.example.proserv.ui.screens.record
 
 // 📦 IMPORTACIÓN DE DEPENDENCIAS Y MODELOS
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,8 +14,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -23,6 +26,8 @@ import kotlinx.coroutines.delay
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import org.example.proserv.ui.FormularioAccion
 import org.example.proserv.data.model.ServicioDto
@@ -61,6 +66,10 @@ fun RecordScreen(
     val successMsg = stringResource(R.string.msg_operation_success)
     var showSuccessOverlay by remember { mutableStateOf(false) }
     val servicio = extraData as? ServicioDto
+    val focusManager = LocalFocusManager.current
+
+    // 🔑 LÓGICA: Navegación nativa
+    BackHandler { onBack() }
 
     LaunchedEffect(state) {
         if (state is RecordUiState.Success) {
@@ -124,11 +133,32 @@ fun RecordScreen(
                     Column(modifier = Modifier.padding(20.dp)) {
                         when (accion) {
                             FormularioAccion.REGISTRAR_EQUIPO -> {
-                                FormField(label = stringResource(R.string.label_brand), placeholder = stringResource(R.string.placeholder_brand), value = text2, onValueChange = { text2 = it })
+                                FormField(
+                                    label = stringResource(R.string.label_brand),
+                                    placeholder = stringResource(R.string.placeholder_brand),
+                                    value = text2,
+                                    onValueChange = { text2 = it },
+                                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                                    keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(androidx.compose.ui.focus.FocusDirection.Down) })
+                                )
                                 Spacer(modifier = Modifier.height(16.dp))
-                                FormField(label = stringResource(R.string.label_model), placeholder = stringResource(R.string.placeholder_model), value = text1, onValueChange = { text1 = it })
+                                FormField(
+                                    label = stringResource(R.string.label_model),
+                                    placeholder = stringResource(R.string.placeholder_model),
+                                    value = text1,
+                                    onValueChange = { text1 = it },
+                                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                                    keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(androidx.compose.ui.focus.FocusDirection.Down) })
+                                )
                                 Spacer(modifier = Modifier.height(16.dp))
-                                FormField(label = stringResource(R.string.label_serial), placeholder = stringResource(R.string.placeholder_serial), value = text3, onValueChange = { text3 = it })
+                                FormField(
+                                    label = stringResource(R.string.label_serial),
+                                    placeholder = stringResource(R.string.placeholder_serial),
+                                    value = text3,
+                                    onValueChange = { text3 = it },
+                                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
+                                )
                                 Spacer(modifier = Modifier.height(16.dp))
                                 
                                 Text(stringResource(R.string.label_client_email), fontSize = 14.sp, fontWeight = FontWeight.Bold, color = azulPetroleo.copy(alpha = 0.7f), modifier = Modifier.padding(start = 4.dp, bottom = 6.dp))
@@ -176,18 +206,48 @@ fun RecordScreen(
                                 } else {
                                     Text(stringResource(R.string.title_finish_order, idEntidad ?: 0), fontWeight = FontWeight.Bold, color = azulPetroleo)
                                     Spacer(modifier = Modifier.height(16.dp))
-                                    FormField(label = stringResource(R.string.label_tech_report), placeholder = stringResource(R.string.placeholder_tech_report), isLong = true, value = text2, onValueChange = { text2 = it })
+                                    FormField(
+                                        label = stringResource(R.string.label_tech_report),
+                                        placeholder = stringResource(R.string.placeholder_tech_report),
+                                        isLong = true,
+                                        value = text2,
+                                        onValueChange = { text2 = it },
+                                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
+                                    )
                                 }
                             }
                             FormularioAccion.CALIFICAR_SERVICIO -> {
                                 Text(stringResource(R.string.rate_service_id, idEntidad ?: 0), fontWeight = FontWeight.Bold, color = azulPetroleo)
                                 Spacer(modifier = Modifier.height(16.dp))
-                                FormField(label = stringResource(R.string.label_rating), placeholder = stringResource(R.string.placeholder_rating), value = text3, onValueChange = { text3 = it })
+                                FormField(
+                                    label = stringResource(R.string.label_rating),
+                                    placeholder = stringResource(R.string.placeholder_rating),
+                                    value = text3,
+                                    onValueChange = { text3 = it },
+                                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
+                                )
                             }
                             else -> {
-                                FormField(label = stringResource(R.string.label_service_title), placeholder = stringResource(R.string.placeholder_service_title), value = text1, onValueChange = { text1 = it })
+                                FormField(
+                                    label = stringResource(R.string.label_service_title),
+                                    placeholder = stringResource(R.string.placeholder_service_title),
+                                    value = text1,
+                                    onValueChange = { text1 = it },
+                                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                                    keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(androidx.compose.ui.focus.FocusDirection.Down) })
+                                )
                                 Spacer(modifier = Modifier.height(16.dp))
-                                FormField(label = stringResource(R.string.label_description), placeholder = stringResource(R.string.placeholder_description), isLong = true, value = text2, onValueChange = { text2 = it })
+                                FormField(
+                                    label = stringResource(R.string.label_description),
+                                    placeholder = stringResource(R.string.placeholder_description),
+                                    isLong = true,
+                                    value = text2,
+                                    onValueChange = { text2 = it },
+                                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                                    keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
+                                )
                                 Spacer(modifier = Modifier.height(16.dp))
                                 Text(stringResource(R.string.label_equipment_id), fontSize = 14.sp, fontWeight = FontWeight.Bold, color = azulPetroleo.copy(alpha = 0.7f), modifier = Modifier.padding(start = 4.dp, bottom = 6.dp))
                                 var expandedEq by remember { mutableStateOf(false) }
@@ -282,7 +342,15 @@ fun RecordScreen(
 }
 
 @Composable
-fun FormField(label: String, placeholder: String, value: String, onValueChange: (String) -> Unit, isLong: Boolean = false) {
+fun FormField(
+    label: String,
+    placeholder: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    isLong: Boolean = false,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default
+) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(text = label, fontSize = 14.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary.copy(alpha = 0.7f), modifier = Modifier.padding(start = 4.dp, bottom = 6.dp))
         TextField(
@@ -290,7 +358,9 @@ fun FormField(label: String, placeholder: String, value: String, onValueChange: 
             placeholder = { Text(placeholder, color = Color.Gray) },
             modifier = Modifier.fillMaxWidth().heightIn(min = if (isLong) 120.dp else 56.dp),
             shape = RoundedCornerShape(12.dp),
-            colors = TextFieldDefaults.colors(focusedContainerColor = MaterialTheme.colorScheme.surface, unfocusedContainerColor = MaterialTheme.colorScheme.surface, focusedIndicatorColor = Color.Transparent, unfocusedIndicatorColor = Color.Transparent)
+            colors = TextFieldDefaults.colors(focusedContainerColor = MaterialTheme.colorScheme.surface, unfocusedContainerColor = MaterialTheme.colorScheme.surface, focusedIndicatorColor = Color.Transparent, unfocusedIndicatorColor = Color.Transparent),
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions
         )
     }
 }

@@ -220,13 +220,15 @@ class RecordViewModel(
 
     /**
      * 🟢 FUNCIÓN: iniciarServicio
-     * RESERVADO PARA TÉCNICO: Cambia el estado de la orden a 'iniciado'.
+     * RESERVADO PARA TÉCNICO: Cambia el estado de la orden a 'iniciado' y marca la fecha de inicio real.
      */
     fun iniciarServicio(idServicio: Long) {
         viewModelScope.launch {
             uiState = RecordUiState.Loading
             try {
-                recordRepository.actualizarServicio(idServicio, mapOf("estado" to "iniciado"))
+                // Al iniciar, actualizamos la fechaIni para que el cálculo de tiempo_sol sea preciso (de iniciado a finalizado)
+                val now = getIsoTimestamp()
+                recordRepository.actualizarServicio(idServicio, mapOf("estado" to "iniciado", "fechaIni" to now))
                 uiState = RecordUiState.Success
             } catch (e: Exception) {
                 uiState = RecordUiState.Error("Error al iniciar servicio")

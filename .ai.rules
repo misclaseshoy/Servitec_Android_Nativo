@@ -1,0 +1,57 @@
+======================================================================
+CONTEXTO DE DESARROLLO - PROYECTO: SERVITEC
+======================================================================
+* comunicacion en idioma en español.
+
+* Por favor, lee atentamente este archivo antes de responder. Contiene las reglas de arquitectura actuales.
+* Analizar las consultas en el chat y revisar el código en los archivos informando que líneas se deben cambiar, pero no editar ningún archivo sin previa autorización."
+* No ejecutar Run sin autorizacion.
+* No ejecutar run ninguna funcion de forma autonoma.
+
+=======================================================================
+1. CONFIGURACIÓN GENERAL Y PAQUETES
+* Nombre de la App: Servitec (Gestión de Servicios Técnicos).
+* Paquete Base: org.example.proserv
+* Paquete de la UI/Pantallas: org.example.proserv.ui.screens
+* Paquete del Tema y Enums: org.example.proserv.ui
+
+=======================================================================
+2. STACK TECNOLÓGICO
+* Lenguaje: Kotlin
+* UI Toolkit: Jetpack Compose con Material 3.
+* Backend: Supabase (BaaS) usando librerías Kotlin nativo.
+* Arquitectura: Gestión de estado mediante AuthViewModel inyectado con una factoría estática (AuthViewModel.Factory) apoyada en un AppContainer.
+
+=======================================================================
+3. MANEJO DE ICONOS
+* la iconografía de la barra superior (TopAppBar) y de las tarjetas del menú (LazyVerticalGrid) se maneja de forma local mediante vectores XML en la carpeta 'res/drawable' invocados con 'painterResource(id = ...)'.
+
+=======================================================================
+4. ENUMERADORES Y NAVEGACIÓN LOCAL ('AppEnums.kt')
++La navegación entre pantallas se gestiona mediante estados locales ('by remember { mutableStateOf(...) }') mapeados en el archivo 'AppEnums.kt' ubicado en el paquete 'org.example.proserv.ui'. Los enums son:
+* AppDestinos: LOGIN, HOME, LIST, RECORD
+* ModuloTipo: SERVICIOS, EQUIPOS, CLIENTES, TECNICOS
+* FormularioAccion: CREAR_SERVICIO, EDITAR_SERVICIO, REGISTRAR_EQUIPO
+
+=======================================================================
+5. ENRUTADOR PRINCIPAL ('AppAnd.kt')
+* Controla el flujo evaluando 'viewModel.authUiState'. Si el estado cae en 'AuthUiState.Idle', fuerza la redirección a 'AppDestinos.LOGIN'.
+* Al iniciar sesión con éxito, se captura el rol del usuario ("administrador", "tecnico" ó "cliente") para condicionar la visibilidad de las pantallas en 'HomeScreen', 'ListScreen' y 'RecordScreen'.
+
+=======================================================================
+6. REGLA PARA PREVIEWS DE JETPACK COMPOSE (@Preview)
+Para evitar pantallas en blanco o errores de inicialización de Supabase en el entorno de diseño:
+* Las vistas previas que exijan un ViewModel deben instanciarse pasando un Mock seguro mediante la factoría:
+  'val viewModelMock: AuthViewModel = viewModel(factory = AuthViewModel.Factory)'
+* Las funciones que requieran parámetros obligatorios de navegación deben inicializarse con lambdas vacías, por ejemplo:
+  HomeScreenPreview() -> llama a HomeScreen(rol = "Admin", onNavigateToList = { _ -> }, onNavigateToRecord = { _ -> }, onLogout = {})
++ Cualquier solución de código propuesta para las pantallas HomeScreen, LoginScreen, ListScreen o RecordScreen debe respetar estrictamente el uso de recursos locales y las rutas de paquetes descritas arriba.
+
+
+=======================================================================
+7. REGLA PARA MANEJO DE CODIGO POR DEL AGENTE (PERMISOS DE ESCRITURA)
+* El agente IA TIENE PROHIBIDO modificar, editar o crear archivos de código de forma autónoma.
+* Para cualquier corrección de errores (build errors), dependencias o lógica de Kotlin/XML, el agente debe mostrar primero la propuesta de código detallada en la ventana de chat.
+* El agente debe solicitar siempre una confirmación explícita del usuario antes de aplicar cambios en el sistema de archivos del proyecto.
+* Si el usuario no da su aprobación textual, el archivo debe permanecer intacto.
++ Si se modifica o se crea código después de la autorización, los comentarios existentes o nuevos deben mejorarse ó crearse para explicar las funciones y secciones importantes o intermedias del diseño, utilizando obligatoriamente iconos descriptivos (📦 para imports, 🔑 para constantes/lógica clave, 🟢 para funciones importantes o intermedias) para documentar las secciones técnicas.
