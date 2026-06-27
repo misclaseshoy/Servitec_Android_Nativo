@@ -43,3 +43,5 @@ local.properties
 
 # Historial de archivos de VCS
 .git/
+.ai.rules
+.aignore
