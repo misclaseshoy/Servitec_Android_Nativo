@@ -30,5 +30,5 @@ Postgrest: Operaciones CRUD sobre la base de datos PostgreSQL.
 ◦
 Auth: Gestión de sesiones y seguridad de usuarios.
 
-
+Registro ok
  xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx-->
