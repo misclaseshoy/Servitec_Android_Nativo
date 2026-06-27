@@ -253,7 +253,8 @@ class RecordViewModel(
                 val diffMs = now.time - (start?.time ?: now.time)
                 
                 // Calculamos minutos con decimales (ej: 2.85 min)
-                val minutos = diffMs / 60000.0
+                val minutos = (diffMs / 60000.0) + 300 // Sumamos 300 minutos por horario DB
+
 
                 val updates = mapOf(
                     "comentaRep" to comentario,
