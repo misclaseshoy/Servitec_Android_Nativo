@@ -161,7 +161,7 @@ class RecordViewModel(
                 val servicio = ServicioDto(
                     id_equipo = idEquipo,
                     falla = "$titulo: $descripcion",
-                    fechaIni = getIsoTimestamp(), 
+                    fechaIni = getIsoTimestamp(),
                     id_tecnico = tecnicoUuid,
                     estado = "pendiente" // El estado inicial por defecto según regla
                 )

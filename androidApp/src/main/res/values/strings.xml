@@ -57,7 +57,7 @@
     <string name="title_start_service">Iniciar Orden #%1$d</string>
     <string name="btn_start_service">INICIAR SERVICIO</string>
     <string name="msg_start_service_confirm">Presione el botón para cambiar el estado de la orden #%1$d a INICIADO.</string>
-    <string name="label_tech_report">Informe Técnico</string>
+    <string name="label_tech_report">Comentario Reparación</string>
     <string name="placeholder_tech_report">Describa la solución aplicada...</string>
     <string name="placeholder_select_tech">Seleccione un técnico</string>
     <string name="placeholder_select_equipment">Seleccione un equipo</string>

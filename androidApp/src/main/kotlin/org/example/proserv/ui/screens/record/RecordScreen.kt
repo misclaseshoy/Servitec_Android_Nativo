@@ -99,8 +99,8 @@ fun RecordScreen(
                             FormularioAccion.ASIGNAR_TECNICO -> stringResource(R.string.title_assign_technician)
                             FormularioAccion.CALIFICAR_SERVICIO -> stringResource(R.string.title_rate_service)
                             FormularioAccion.EDITAR_SERVICIO -> {
-                                val servicio = extraData as? ServicioDto
-                                if (servicio?.estado == "pendiente") stringResource(R.string.title_start_service, idEntidad ?: 0)
+                                val estadoActual = servicio?.estado?.lowercase()?.trim()?.replace("'", "")?.replace("\"", "") ?: ""
+                                if (estadoActual == "pendiente") stringResource(R.string.title_start_service, idEntidad ?: 0)
                                 else stringResource(R.string.title_finish_order_simple)
                             }
                             else -> stringResource(R.string.title_new_service)
@@ -201,20 +201,46 @@ fun RecordScreen(
                                 }
                             }
                             FormularioAccion.EDITAR_SERVICIO -> {
-                                if (servicio?.estado == "pendiente") {
-                                    Text(stringResource(R.string.msg_start_service_confirm, idEntidad ?: 0), fontWeight = FontWeight.Bold, color = azulPetroleo)
-                                } else {
-                                    Text(stringResource(R.string.title_finish_order, idEntidad ?: 0), fontWeight = FontWeight.Bold, color = azulPetroleo)
-                                    Spacer(modifier = Modifier.height(16.dp))
-                                    FormField(
-                                        label = stringResource(R.string.label_tech_report),
-                                        placeholder = stringResource(R.string.placeholder_tech_report),
-                                        isLong = true,
-                                        value = text2,
-                                        onValueChange = { text2 = it },
-                                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
-                                    )
+                                val estadoActual = servicio?.estado?.lowercase()?.trim()?.replace("'", "")?.replace("\"", "") ?: ""
+                                when (estadoActual) {
+                                    "pendiente" -> {
+                                        Text("Presione iniciar servicio", fontWeight = FontWeight.ExtraBold, color = azulPetroleo, fontSize = 20.sp)
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                        Text(stringResource(R.string.msg_start_service_confirm, idEntidad ?: 0), color = Color.Gray)
+                                    }
+                                    "iniciado" -> {
+                                        Text(stringResource(R.string.title_finish_order, idEntidad ?: 0), fontWeight = FontWeight.Bold, color = azulPetroleo, fontSize = 18.sp)
+                                        Spacer(modifier = Modifier.height(16.dp))
+                                        FormField(
+                                            label = stringResource(R.string.label_tech_report),
+                                            placeholder = stringResource(R.string.placeholder_tech_report),
+                                            isLong = true,
+                                            value = text2,
+                                            onValueChange = { text2 = it },
+                                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                                            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() })
+                                        )
+                                    }
+                                    "finalizado" -> {
+                                        Text("Orden #$idEntidad Finalizada", fontWeight = FontWeight.Bold, color = azulPetroleo, fontSize = 20.sp)
+                                        Spacer(modifier = Modifier.height(16.dp))
+                                        if (servicio?.tiempoSol != null) {
+                                            Text("Tiempo de solución: ${servicio.tiempoSol} min", fontWeight = FontWeight.Bold, color = Color.Gray)
+                                            Spacer(modifier = Modifier.height(8.dp))
+                                        }
+                                        FormField(
+                                            label = stringResource(R.string.label_tech_report),
+                                            placeholder = "",
+                                            isLong = true,
+                                            value = servicio?.comentaRep ?: "",
+                                            onValueChange = {},
+                                            readOnly = true
+                                        )
+                                    }
+                                    else -> {
+                                        // Caso de seguridad: Si no hay estado o es desconocido
+                                        Text("Estado del servicio: ${servicio?.estado ?: "Desconocido"}", fontWeight = FontWeight.Bold, color = azulPetroleo)
+                                    }
                                 }
                             }
                             FormularioAccion.CALIFICAR_SERVICIO -> {
@@ -299,15 +325,16 @@ fun RecordScreen(
 
                 Button(
                     onClick = {
+                        val estadoActual = servicio?.estado?.lowercase()?.trim()?.replace("'", "")?.replace("\"", "") ?: ""
                         when (accion) {
                             FormularioAccion.REGISTRAR_EQUIPO -> viewModel.registrarEquipo(text2, text1, text3, text5)
                             FormularioAccion.ASIGNAR_TECNICO -> viewModel.asignarTecnico(idEntidad ?: 0L, text6)
                             FormularioAccion.CALIFICAR_SERVICIO -> viewModel.calificarServicio(idEntidad ?: 0L, text3.toDoubleOrNull() ?: 0.0)
                             FormularioAccion.EDITAR_SERVICIO -> {
-                                if (servicio?.estado == "pendiente") {
-                                    viewModel.iniciarServicio(idEntidad ?: 0L)
-                                } else {
-                                    viewModel.finalizarServicio(idEntidad ?: 0L, text2, servicio?.fechaIni ?: "")
+                                when (estadoActual) {
+                                    "pendiente" -> viewModel.iniciarServicio(idEntidad ?: 0L)
+                                    "iniciado" -> viewModel.finalizarServicio(idEntidad ?: 0L, text2, servicio?.fechaIni ?: "")
+                                    else -> onBack()
                                 }
                             }
                             else -> viewModel.crearServicio(text1, text2, text4.toLongOrNull() ?: 0L, text6)
@@ -321,8 +348,11 @@ fun RecordScreen(
                     if (state is RecordUiState.Loading) {
                         CircularProgressIndicator(color = Color.White, modifier = Modifier.size(24.dp))
                     } else {
+                        val estadoActual = servicio?.estado?.lowercase()?.trim()?.replace("'", "")?.replace("\"", "") ?: ""
                         val label = when {
-                            accion == FormularioAccion.EDITAR_SERVICIO && servicio?.estado == "pendiente" -> stringResource(R.string.btn_start_service)
+                            accion == FormularioAccion.EDITAR_SERVICIO && estadoActual == "pendiente" -> stringResource(R.string.btn_start_service)
+                            accion == FormularioAccion.EDITAR_SERVICIO && estadoActual == "iniciado" -> stringResource(R.string.title_finish_order_simple)
+                            accion == FormularioAccion.EDITAR_SERVICIO && estadoActual == "finalizado" -> "VOLVER"
                             else -> stringResource(R.string.save)
                         }
                         Text(text = label, color = if (accion == FormularioAccion.REGISTRAR_EQUIPO) Color.White else azulPetroleo, fontWeight = FontWeight.Bold)
@@ -348,6 +378,7 @@ fun FormField(
     value: String,
     onValueChange: (String) -> Unit,
     isLong: Boolean = false,
+    readOnly: Boolean = false,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
@@ -360,7 +391,8 @@ fun FormField(
             shape = RoundedCornerShape(12.dp),
             colors = TextFieldDefaults.colors(focusedContainerColor = MaterialTheme.colorScheme.surface, unfocusedContainerColor = MaterialTheme.colorScheme.surface, focusedIndicatorColor = Color.Transparent, unfocusedIndicatorColor = Color.Transparent),
             keyboardOptions = keyboardOptions,
-            keyboardActions = keyboardActions
+            keyboardActions = keyboardActions,
+            readOnly = readOnly
         )
     }
 }
