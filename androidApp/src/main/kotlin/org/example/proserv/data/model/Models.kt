@@ -42,7 +42,7 @@ data class ServicioDto(
     val estado: String = "pendiente", // 'pendiente', 'iniciado', 'finalizado'
     val fechaIni: String,           // Timestamp de apertura (ISO 8601)
     val fechaFin: String? = null,   // Timestamp de cierre
-    val tiempoSol: Long? = null,    // Duración total en minutos (Calculado)
+    val tiempoSol: Double? = null,  // Duración total en minutos (Calculado con decimales)
     val califica: Double? = null,   // Puntuación del cliente (1-5)
     val falla: String,              // Descripción detallada del problema
     val comentaRep: String? = null, // Reporte técnico final

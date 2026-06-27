@@ -251,7 +251,9 @@ class RecordViewModel(
                 // Parseamos la fecha de inicio para calcular el tiempo de solución en minutos
                 val start = parseIsoTimestamp(fechaIniStr)
                 val diffMs = now.time - (start?.time ?: now.time)
-                val minutos = diffMs / (1000 * 60)
+                
+                // Calculamos minutos con decimales (ej: 2.85 min)
+                val minutos = diffMs / 60000.0
 
                 val updates = mapOf(
                     "comentaRep" to comentario,
@@ -281,16 +283,27 @@ class RecordViewModel(
 
     /**
      * 🟢 FUNCIÓN PRIVADA: parseIsoTimestamp
-     * Convierte una cadena ISO 8601 de vuelta a un objeto Date para cálculos.
+     * Maneja múltiples formatos de fecha para evitar errores de cálculo (0 min).
      */
     private fun parseIsoTimestamp(isoString: String): java.util.Date? {
-        return try {
-            val sdf = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", java.util.Locale.US)
-            sdf.timeZone = java.util.TimeZone.getTimeZone("UTC")
-            sdf.parse(isoString)
-        } catch (e: Exception) {
-            null
+        // Limpieza de caracteres de zona horaria de Postgres para el parser de Java
+        val cleanIso = isoString.replace("Z", "").replace("+00", "").replace("T", " ")
+        
+        val formats = listOf(
+            "yyyy-MM-dd HH:mm:ss.SSS",
+            "yyyy-MM-dd HH:mm:ss",
+            "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
+        )
+        for (format in formats) {
+            try {
+                val sdf = java.text.SimpleDateFormat(format, java.util.Locale.US)
+                if (format.contains("'Z'")) sdf.timeZone = java.util.TimeZone.getTimeZone("UTC")
+                return sdf.parse(cleanIso)
+            } catch (e: Exception) {
+                continue
+            }
         }
+        return null
     }
 
     /**
