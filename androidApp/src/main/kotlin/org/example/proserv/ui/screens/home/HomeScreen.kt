@@ -198,7 +198,10 @@ fun HomeScreen(
                             painter = painterResource(id = R.drawable.noti),
                             contentDescription = stringResource(R.string.noti_desc),
                             tint = azulPetroleo,
-                            modifier = Modifier.size(57.dp)
+                            modifier = Modifier
+                                .weight(1f)
+                                .size(40.dp)
+                                .clickable { /* 🟢 Acción: notificaciones */ }
                         )
                         // 📍 ACCIÓN: Refrescar Home
                         Icon(
@@ -206,7 +209,8 @@ fun HomeScreen(
                             contentDescription = stringResource(R.string.home_desc),
                             tint = azulPetroleo,
                             modifier = Modifier
-                                .size(82.dp)
+                                .weight(1f)
+                                .size(40.dp)
                                 .clickable { /* 🟢 Acción: Recarga de datos del Dashboard */ }
                         )
                         // 📍 ACCIÓN: Salida Segura
@@ -215,7 +219,8 @@ fun HomeScreen(
                             contentDescription = stringResource(R.string.logout_desc),
                             tint = azulPetroleo,
                             modifier = Modifier
-                                .size(63.dp)
+                                .weight(1f)
+                                .size(40.dp)
                                 .clickable { onLogout() }
                         )
                     }
